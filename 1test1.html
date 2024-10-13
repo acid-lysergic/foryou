@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ily</title>
+    <style>
+        body {
+            background-image: url('https://c4.wallpaperflare.com/wallpaper/690/498/544/hello-kitty-wallpaper-preview.jpg');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            position: relative;
+        }
+        #loveButton {
+            background-color: deeppink;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 2;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s;
+        }
+        #loveButton:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 24px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.29s;
+            z-index: 1;
+        }
+        .flower {
+            position: absolute;
+            font-size: 24px;
+            animation: burst 1s forwards;
+        }
+        .custom-text {
+            position: absolute;
+            font-size: 36px;
+            opacity: 0.1;
+            animation: pop 1s forwards, fadeOut 3s forwards;
+        }
+        @keyframes burst {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(50px * var(--x)), calc(50px * var(--y)));
+                opacity: 0;
+            }
+        }
+        @keyframes pop {
+            from {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(-50px);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+            }
+        }
+        .color-button {
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+        }
+        #colorOptions, #bgOptions {
+            display: none;
+            flex-direction: row;
+            margin-top: 10px;
+        }
+        #changeColorButton, #changeBgButton {
+            background-color: white;
+            color: black;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 2;
+            transition: transform 0.1s;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+        #changeColorButton:active, #changeBgButton:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="loveButton" onclick="toggleMessage()">happy womens day</button>
+    <div id="message">i love you</div>
+
+    <div>
+        <button id="changeColorButton" onclick="toggleColorOptions()">Change Color</button>
+        <button id="changeBgButton" onclick="toggleBgOptions()">Change Background</button>
+    </div>
+    <div id="colorOptions">
+        <button class="color-button" style="background-color: green;" onclick="changeButtonColor('green')"></button>
+        <button class="color-button" style="background-color: gray;" onclick="changeButtonColor('gray')"></button>
+        <button class="color-button" style="background-color: purple;" onclick="changeButtonColor('purple')"></button>
+        <button class="color-button" style="background-color: red;" onclick="changeButtonColor('red')"></button>
+        <button class="color-button" style="background-color: deeppink;" onclick="changeButtonColor('deeppink')"></button>
+    </div>
+
+    <div id="bgOptions">
+        <button class="bg-button" onclick="changeBackground(1)">1</button>
+        <button class="bg-button" onclick="changeBackground(2)">2</button>
+        <button class="bg-button" onclick="changeBackground(3)">3</button>
+    </div>
+
+    <script>
+        let isMessageVisible = false;
+
+        function toggleMessage() {
+            const message = document.getElementById('message');
+            if (!isMessageVisible) {
+                message.style.display = 'block';
+                setTimeout(() => {
+                    message.style.opacity = '1';
+                }, 10);
+                burstFlowers();
+            } else {
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 290);
+            }
+            isMessageVisible = !isMessageVisible;
+        }
+
+        function burstFlowers() {
+            const flowerCount = 29;
+            for (let i = 0; i < flowerCount; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerText = '🌸';
+                
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.top = Math.random() * 100 + 'vh';
+
+                flower.style.setProperty('--x', (Math.random() - 0.5).toString());
+                flower.style.setProperty('--y', (Math.random() - 0.5).toString());
+
+                document.body.appendChild(flower);
+                
+                setTimeout(() => {
+                    flower.remove();
+                }, 3000);
+                
+                if (i < 2) {
+                    createCustomText();
+                }
+            }
+        }
+
+        function createCustomText() {
+            const texts = ['m', 't'];
+            const textElement = document.createElement('div');
+            textElement.className = 'custom-text';
+            textElement.innerText = texts[Math.floor(Math.random() * texts.length)];
+            textElement.style.left = Math.random() * 100 + 'vw';
+            textElement.style.top = Math.random() * 100 + 'vh';
+            document.body.appendChild(textElement);
+            
+            setTimeout(() => {
+                textElement.style.opacity = '0';
+            }, 1000);
+
+            setTimeout(() => {
+                textElement.remove();
+            }, 4000);
+        }
+
+        function changeButtonColor(color) {
+            document.getElementById('loveButton').style.backgroundColor = color;
+        }
+
+        function toggleColorOptions() {
+            const colorOptions = document.getElementById('colorOptions');
+            colorOptions.style.display = colorOptions.style.display === 'none' ? 'flex' : 'none';
+            document.getElementById('bgOptions').style.display = 'none'; // Close background options
+        }
+
+        function toggleBgOptions() {
+            const bgOptions = document.getElementById('bgOptions');
+            bgOptions.style.display = bgOptions.style.display === 'none' ? 'flex' : 'none';
+            document.getElementById('colorOptions').style.display = 'none'; // Close color options
+        }
+
+        function changeBackground(option) {
+            switch (option) {
+                case 1:
+                    document.body.style.backgroundImage = "url('https://c4.wallpaperflare.com/wallpaper/690/498/544/hello-kitty-wallpaper-preview.jpg')";
+                    break;
+                case 2:
+                    document.body.style.backgroundImage = "url('https://marketplace.canva.com/EAFMZO25Fds/1/0/1600w/canva-green-playful-frog-desktop-wallpaper-0uuRld0-IIg.jpg')";
+                    break;
+                case 3:
+                    document.body.style.backgroundImage = "url('https://img.freepik.com/free-vector/pink-flower-pattern-wallpaper-vector-hand-drawn-style_53876-136788.jpg')";
+                    break;
+            }
+        }
+
+    </script>
+
+</body>
+</html>
